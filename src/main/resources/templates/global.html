@@ -1,0 +1,1489 @@
+<!doctype html>
+<html lang="my">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Global Admin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --navy: #0f172a;
+            --blue-dark: #172554;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+            --radius: 18px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(37, 99, 235, .08),
+                    transparent 28%
+                ),
+                #f1f5f9;
+
+            font-family:
+                "Noto Sans Myanmar",
+                "Noto Sans",
+                "Myanmar Text",
+                Arial,
+                sans-serif;
+
+            line-height: 1.6;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            min-height: 78px;
+
+            padding: 14px 5%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a 0%,
+                    #172554 55%,
+                    #1e40af 100%
+                );
+
+            box-shadow:
+                0 8px 30px rgba(15, 23, 42, .25);
+        }
+
+        header > div:first-child {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            font-size: 24px;
+
+            background:
+                rgba(255, 255, 255, .12);
+
+            border:
+                1px solid rgba(255, 255, 255, .18);
+
+            box-shadow:
+                inset 0 1px rgba(255, 255, 255, .1);
+        }
+
+        .brand.small {
+            font-size: 23px;
+        }
+
+        header strong {
+            display: block;
+
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        header small {
+            display: block;
+
+            margin-top: 1px;
+
+            color: #cbd5e1;
+
+            font-size: 12px;
+        }
+
+        header > div:last-child {
+            white-space: nowrap;
+
+            color: #e2e8f0;
+
+            font-size: 13px;
+        }
+
+        header a {
+            color: #93c5fd;
+
+            text-decoration: none;
+
+            font-weight: 800;
+
+            transition: .2s ease;
+        }
+
+        header a:hover {
+            color: white;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .wrap {
+            width: min(1500px, 92%);
+
+            margin: 0 auto;
+
+            padding:
+                32px 0 70px;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            position: relative;
+
+            overflow: hidden;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 25px;
+
+            padding: 34px 38px;
+
+            margin-bottom: 24px;
+
+            border-radius: 24px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a 0%,
+                    #1e3a8a 55%,
+                    #2563eb 100%
+                );
+
+            box-shadow: var(--shadow);
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            top: -170px;
+            right: -90px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,.07);
+        }
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 170px;
+            height: 170px;
+
+            bottom: -110px;
+            right: 180px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,.05);
+        }
+
+        .hero > div,
+        .hero .status {
+            position: relative;
+            z-index: 2;
+        }
+
+        .eyebrow {
+            margin-bottom: 7px;
+
+            color: #60a5fa;
+
+            font-size: 11px;
+            font-weight: 900;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+        }
+
+        .hero .eyebrow {
+            color: #bfdbfe;
+        }
+
+        .hero h1 {
+            margin-bottom: 10px;
+
+            font-size:
+                clamp(25px, 3vw, 36px);
+
+            line-height: 1.25;
+
+            font-weight: 900;
+        }
+
+        .hero p:not(.eyebrow) {
+            max-width: 850px;
+
+            color: #dbeafe;
+
+            font-size: 14px;
+        }
+
+        .status {
+            flex-shrink: 0;
+
+            padding: 10px 16px;
+
+            border-radius: 999px;
+
+            color: #bbf7d0;
+
+            background:
+                rgba(22, 163, 74, .16);
+
+            border:
+                1px solid rgba(134, 239, 172, .28);
+
+            font-size: 13px;
+            font-weight: 800;
+
+            backdrop-filter: blur(8px);
+        }
+
+        /* =========================
+           STATISTICS
+        ========================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 24px;
+        }
+
+        .stats > div {
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 21px 22px;
+
+            background: white;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 17px;
+
+            box-shadow: var(--shadow);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .stats > div:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 16px 35px rgba(15,23,42,.11);
+        }
+
+        .stats > div::after {
+            content: "";
+
+            position: absolute;
+
+            width: 75px;
+            height: 75px;
+
+            right: -25px;
+            bottom: -30px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(37,99,235,.07);
+        }
+
+        .stats small {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stats b {
+            display: block;
+
+            color: var(--navy);
+
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error {
+            margin-bottom: 20px;
+
+            padding: 13px 16px;
+
+            color: #991b1b;
+
+            background: #fee2e2;
+
+            border:
+                1px solid #fecaca;
+
+            border-radius: 12px;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           GRID
+        ========================= */
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+
+            margin-bottom: 24px;
+        }
+
+        .grid article {
+            padding: 26px;
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                border-color .2s ease;
+        }
+
+        .grid article:hover {
+            transform: translateY(-3px);
+
+            border-color: #bfdbfe;
+
+            box-shadow:
+                0 18px 40px rgba(15,23,42,.10);
+        }
+
+        .grid article:first-child {
+            border-top:
+                3px solid var(--primary);
+        }
+
+        .grid article:nth-child(2) {
+            border-top:
+                3px solid #64748b;
+        }
+
+        .grid h2 {
+            margin-bottom: 17px;
+
+            color: var(--navy);
+
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        /* =========================
+           LOGIN ADMIN FORM
+        ========================= */
+
+        form {
+            display: flex;
+            flex-direction: column;
+
+            gap: 11px;
+        }
+
+        input {
+            width: 100%;
+
+            min-height: 45px;
+
+            padding: 10px 13px;
+
+            color: var(--text);
+
+            background: #f8fafc;
+
+            border:
+                1px solid #dbe2ea;
+
+            border-radius: 11px;
+
+            outline: none;
+
+            font-family: inherit;
+            font-size: 13px;
+
+            transition: .2s ease;
+        }
+
+        input:hover {
+            background: white;
+
+            border-color:
+                #cbd5e1;
+        }
+
+        input:focus {
+            background: white;
+
+            border-color:
+                var(--primary);
+
+            box-shadow:
+                0 0 0 3px rgba(37,99,235,.10);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        .grid form button {
+            min-height: 45px;
+
+            border: 0;
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-dark)
+                );
+
+            font-family: inherit;
+
+            font-size: 13px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 7px 16px rgba(37,99,235,.20);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .grid form button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 22px rgba(37,99,235,.28);
+        }
+
+        /* =========================
+           PERMISSIONS
+        ========================= */
+
+        .permission {
+            position: relative;
+
+            margin-bottom: 12px;
+
+            padding: 15px 16px 15px 44px;
+
+            color: #475569;
+
+            background:
+                #f8fafc;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            font-size: 13px;
+
+            transition: .2s ease;
+        }
+
+        .permission:hover {
+            background: #eff6ff;
+
+            border-color:
+                #bfdbfe;
+        }
+
+        .permission::before {
+            content: "✓";
+
+            position: absolute;
+
+            left: 14px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 22px;
+            height: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+
+            background:
+                var(--success);
+
+            border-radius: 50%;
+
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        /* =========================
+           PANELS
+        ========================= */
+
+        .panel {
+            margin-top: 20px;
+
+            overflow: hidden;
+
+            background: white;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+        }
+
+        .panel-head {
+            min-height: 75px;
+
+            padding: 18px 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #ffffff,
+                    #f8fafc
+                );
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+        .panel-head h2 {
+            color: var(--navy);
+
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .hint {
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-wrap {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            min-width: 1050px;
+
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 14px 16px;
+
+            color: #475569;
+
+            background: #f8fafc;
+
+            border-bottom:
+                1px solid var(--border);
+
+            font-size: 11px;
+            font-weight: 900;
+
+            text-align: left;
+
+            white-space: nowrap;
+
+            text-transform: uppercase;
+
+            letter-spacing: .25px;
+        }
+
+        td {
+            padding: 14px 16px;
+
+            color: #334155;
+
+            border-bottom:
+                1px solid #eef2f7;
+
+            font-size: 13px;
+
+            vertical-align: middle;
+
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            transition:
+                background .18s ease;
+        }
+
+        tbody tr:hover {
+            background:
+                #f8fbff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        /* =========================
+           TABLE TAG
+        ========================= */
+
+        td strong {
+            color: var(--navy);
+        }
+
+        td:nth-child(4),
+        td:nth-child(5),
+        td:nth-child(6) {
+            font-weight: 700;
+        }
+
+        /* =========================
+           TABLE ACTION
+        ========================= */
+
+        td form {
+            display: inline-flex;
+
+            margin: 0;
+        }
+
+        button.link {
+            min-height: auto;
+
+            padding: 6px 10px;
+
+            border: 0;
+
+            border-radius: 8px;
+
+            color: var(--primary);
+
+            background: transparent;
+
+            font-family: inherit;
+
+            font-size: 12px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            box-shadow: none;
+
+            transition: .2s ease;
+        }
+
+        button.link:hover {
+            color: var(--primary-dark);
+
+            background:
+                #eff6ff;
+        }
+
+        /* =========================
+           SCROLLBAR
+        ========================= */
+
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            header {
+                align-items: flex-start;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            header {
+                position: relative;
+
+                flex-direction: column;
+
+                padding:
+                    15px 4%;
+            }
+
+            header > div:last-child {
+                width: 100%;
+            }
+
+            .wrap {
+                width: 94%;
+
+                padding-top: 20px;
+            }
+
+            .hero {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                padding:
+                    27px 24px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-head {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 25px;
+            }
+
+            .hero p:not(.eyebrow) {
+                font-size: 13px;
+            }
+
+            .grid article {
+                padding: 20px;
+            }
+
+            .panel-head {
+                padding:
+                    17px 18px;
+            }
+
+            td,
+            th {
+                padding:
+                    12px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header>
+
+        <div>
+
+            <span class="brand small">
+                🚌
+            </span>
+
+            <div>
+                <strong>
+                    Global Admin 
+                </strong>
+
+                
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <span th:text="${admin.name}"></span>
+
+            ·
+
+            <a href="/logout">
+                ထွက်ရန်
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main class="wrap">
+
+
+        <!-- =========================
+             HERO
+        ========================== -->
+
+        <section class="hero">
+
+            <div>
+
+                <p class="eyebrow">
+                    Read-only operations view
+                </p>
+
+                <h1>
+                    Global Admin
+                </h1>
+
+                <p>
+                    Local Admin account များကို စီမံပြီး
+                    လုပ်ငန်းဒေတာများကို ကြည့်ရှုနိုင်ပါသည်။
+                    Bus, Trip, Route, Ticket များကို
+                    ဤအပိုင်းမှ ပြင်ဆင်၍မရပါ။
+                </p>
+
+            </div>
+
+
+            <span class="status">
+                ● ကြည့်ရှုခွင့်သာ
+            </span>
+
+        </section>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <section class="stats">
+
+            <div>
+
+                <small>
+                    အသုံးပြုနေသော ဘတ်စ်ကား
+                </small>
+
+                <b th:text="${busCount}"></b>
+
+            </div>
+
+
+            <div>
+
+                <small>
+                    စီစဉ်ထားသော လမ်းကြောင်း
+                </small>
+
+                <b th:text="${routeCount}"></b>
+
+            </div>
+
+
+            <div>
+
+                <small>
+                    ရောင်းပြီးလက်မှတ်
+                </small>
+
+                <b th:text="${ticketCount}"></b>
+
+            </div>
+
+
+            <div>
+
+                <small>
+                    ဝင်ငွေ
+                </small>
+
+                <b>
+
+                    <span th:text="${revenue}"></span>
+
+                    ကျပ်
+
+                </b>
+
+            </div>
+
+        </section>
+
+
+        <!-- ERROR -->
+
+        <p
+            class="error"
+            th:if="${error}"
+            th:text="${error}">
+        </p>
+
+
+        <!-- =========================
+             ADMIN + PERMISSION
+        ========================== -->
+
+        <section class="grid">
+
+
+            <!-- CREATE ADMIN -->
+
+            <article>
+
+                <h2>
+                    👤 Local Admin အသစ်ဖန်တီးရန်
+                </h2>
+
+
+                <form
+                    method="post"
+                    action="/admin"
+                >
+
+                    <input
+                        name="name"
+                        placeholder="အမည်"
+                        required
+                    >
+
+
+                    <input
+                        name="email"
+                        type="email"
+                        placeholder="အီးမေးလ်"
+                        required
+                    >
+
+
+                    <input
+                        name="username"
+                        placeholder="အသုံးပြုသူအမည်"
+                        required
+                    >
+
+
+                    <input
+                        name="password"
+                        type="password"
+                        placeholder="စကားဝှက်"
+                        minlength="4"
+                        required
+                    >
+
+
+                    <button type="submit">
+                        👤 Local Admin ဖန်တီးရန်
+                    </button>
+
+                </form>
+
+            </article>
+
+
+            <!-- PERMISSIONS -->
+
+            <article>
+
+                <h2>
+                    🔐 ခွင့်ပြုချက်အကျဉ်း
+                </h2>
+
+
+                <p class="permission">
+                    Global Admin:
+                    Local Admin ကို စီမံရန်၊
+                    Bus / Trip / Route / Ticket ကို ကြည့်ရန်
+                </p>
+
+
+                <p class="permission">
+                    Local Admin:
+                    Bus / Trip / Route / Ticket ကို စီမံရန်နှင့်
+                    Ticket ထုတ်ရန်
+                </p>
+
+            </article>
+
+        </section>
+
+
+        <!-- =========================
+             LOCAL ADMIN TABLE
+        ========================== -->
+
+        <section class="panel">
+
+            <div class="panel-head">
+
+                <h2>
+                    👥 Local Admin စာရင်း
+                </h2>
+
+                <span class="hint">
+                    Global Admin သီးသန့်စီမံမှု
+                </span>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>အမည်</th>
+
+                            <th>အီးမေးလ်</th>
+
+                            <th>Username</th>
+
+                            <th>Role</th>
+
+                            <th>Status</th>
+
+                            <th>လုပ်ဆောင်ချက်</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr th:each="a:${admins}">
+
+                            <td>
+                                <strong
+                                    th:text="${a.name}">
+                                </strong>
+                            </td>
+
+                            <td
+                                th:text="${a.email}">
+                            </td>
+
+                            <td
+                                th:text="${a.username}">
+                            </td>
+
+                            <td
+                                th:text="${a.admin_role}">
+                            </td>
+
+                            <td
+                                th:text="${a.active ? 'အသုံးပြုနေ' : 'ပိတ်ထား'}">
+                            </td>
+
+                            <td>
+
+                                <form
+                                    th:if="${a.admin_role == 'LOCAL_ADMIN'}"
+                                    method="post"
+                                    th:action="@{'/admin/'+${a.id}+'/toggle'}"
+                                >
+
+                                    <button
+                                        class="link"
+                                        th:text="${a.active ? 'ပိတ်မည်' : 'ပြန်ဖွင့်မည်'}">
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             BUS + TRIP TABLE
+        ========================== -->
+
+        <section class="panel">
+
+            <div class="panel-head">
+
+                <h2>
+                    🚌 ဘတ်စ်ကားနှင့် ခရီးစဉ်များ
+                </h2>
+
+                <span class="hint">
+                    Bus → Route → Trip ဆက်စပ်ဒေတာ
+                </span>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Bus</th>
+
+                            <th>အမျိုးအစား</th>
+
+                            <th>ခုံ</th>
+
+                            <th>ထွက်ခွာရာ</th>
+
+                            <th>ရောက်ရာ</th>
+
+                            <th>အကွာအဝေး</th>
+
+                            <th>Route</th>
+
+                            <th>ရက်စွဲ</th>
+
+                            <th>အချိန်</th>
+
+                            <th>လွတ်ခုံ</th>
+
+                            <th>အခြေအနေ</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr th:each="b:${busTrips}">
+
+                            <td>
+                                <strong
+                                    th:text="${b.bus_number}">
+                                </strong>
+                            </td>
+
+                            <td
+                                th:text="${b.bus_type}">
+                            </td>
+
+                            <td
+                                th:text="${b.seat_capacity}">
+                            </td>
+
+                            <td
+                                th:text="${b.departure_location != null ? b.departure_location : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${b.destination_location != null ? b.destination_location : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${b.distance_km != null ? b.distance_km + ' km' : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${b.route_id != null ? '#'+b.route_id : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${b.route_date != null ? b.route_date : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${b.departure_time != null ? b.departure_time+' - '+b.arrival_time : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${b.available_seats != null ? b.available_seats : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${b.route_status != null ? b.route_status : (b.bus_active ? 'Bus အသုံးပြုနေ' : 'Bus ပိတ်ထား')}">
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ROUTE + TICKET TABLE
+        ========================== -->
+
+        <section class="panel">
+
+            <div class="panel-head">
+
+                <h2>
+                    🎫 Route နှင့် Ticket ကြည့်ရှုရန်
+                </h2>
+
+                <span class="hint">
+                    Route နှင့် သက်ဆိုင်သော Ticket ကို
+                    တစ်ကြောင်းတည်းတွင်ပြ
+                </span>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Route</th>
+
+                            <th>Trip</th>
+
+                            <th>ရက်စွဲ</th>
+
+                            <th>အချိန်</th>
+
+                            <th>လွတ်ခုံ</th>
+
+                            <th>ဈေးနှုန်း</th>
+
+                            <th>Ticket ID</th>
+
+                            <th>ခရီးသည်</th>
+
+                            <th>ဖုန်း</th>
+
+                            <th>ထိုင်ခုံ</th>
+
+                            <th>ပမာဏ</th>
+
+                            <th>Ticket Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr th:each="r:${routeTickets}">
+
+                            <td>
+
+                                <strong
+                                    th:text="${r.departure_location+' → '+r.destination_location}">
+                                </strong>
+
+                            </td>
+
+                            <td
+                                th:text="${'#'+r.trip_id}">
+                            </td>
+
+                            <td
+                                th:text="${r.route_date}">
+                            </td>
+
+                            <td
+                                th:text="${r.departure_time+' - '+r.arrival_time}">
+                            </td>
+
+                            <td
+                                th:text="${r.available_seats}">
+                            </td>
+
+                            <td
+                                th:text="${r.ticket_price_kyat+' ကျပ်'}">
+                            </td>
+
+                            <td
+                                th:text="${r.ticket_id != null ? '#'+r.ticket_id : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${r.passenger_name != null ? r.passenger_name : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${r.passenger_phone != null ? r.passenger_phone : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${r.seat_number != null ? r.seat_number : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${r.total_amount_kyat != null ? r.total_amount_kyat+' ကျပ်' : '—'}">
+                            </td>
+
+                            <td
+                                th:text="${r.ticket_status != null ? r.ticket_status : 'Ticket မရှိသေး'}">
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

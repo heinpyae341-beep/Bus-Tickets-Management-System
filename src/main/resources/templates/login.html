@@ -1,0 +1,386 @@
+<!doctype html>
+
+<html lang="my">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>မြန်မာ ဘတ်စ်ကားစီမံမှု</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+
+        font-family:
+            "Noto Sans Myanmar",
+            "Myanmar Text",
+            Arial,
+            sans-serif;
+
+        /* မိုးပြာရောင် Background */
+        background:
+            radial-gradient(
+                circle at 15% 20%,
+                rgba(255, 255, 255, .35),
+                transparent 30%
+            ),
+            radial-gradient(
+                circle at 85% 80%,
+                rgba(255, 255, 255, .22),
+                transparent 32%
+            ),
+            linear-gradient(
+                135deg,
+                #7dd3fc,
+                #38bdf8,
+                #0ea5e9
+            );
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 25px;
+
+        color: #1f2937;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 470px;
+
+        background: rgba(255, 255, 255, .96);
+
+        border: 1px solid rgba(255, 255, 255, .6);
+        border-radius: 26px;
+
+        padding: 42px 40px 38px;
+
+        box-shadow:
+            0 30px 70px rgba(0, 80, 140, .25),
+            0 10px 25px rgba(0, 0, 0, .12);
+
+        text-align: center;
+
+        position: relative;
+        overflow: hidden;
+
+        animation: cardIn .6s ease;
+    }
+
+    .login-card::before {
+        content: "";
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        height: 6px;
+
+        background:
+            linear-gradient(
+                90deg,
+                #0284c7,
+                #0ea5e9,
+                #38bdf8
+            );
+    }
+
+    .brand {
+        width: 86px;
+        height: 86px;
+
+        margin: 5px auto 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 24px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #38bdf8,
+                #0284c7
+            );
+
+        font-size: 45px;
+
+        box-shadow:
+            0 12px 25px rgba(14, 165, 233, .35);
+
+        transform: rotate(-2deg);
+    }
+
+    .eyebrow {
+        font-size: 14px;
+
+        font-weight: 700;
+
+        color: #0284c7;
+
+        margin-bottom: 8px;
+
+        letter-spacing: .3px;
+    }
+
+    h1 {
+        font-size: 29px;
+
+        line-height: 1.4;
+
+        color: #0f172a;
+
+        margin-bottom: 12px;
+
+        font-weight: 800;
+    }
+
+    .login-card > p:not(.eyebrow):not(.error) {
+        font-size: 14px;
+
+        line-height: 1.8;
+
+        color: #64748b;
+
+        margin-bottom: 30px;
+    }
+
+    form {
+        text-align: left;
+    }
+
+    label {
+        display: block;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        color: #334155;
+
+        margin-bottom: 18px;
+    }
+
+    input {
+        width: 100%;
+
+        margin-top: 8px;
+
+        height: 52px;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 13px;
+
+        background: #f8fafc;
+
+        padding: 0 16px;
+
+        font-size: 15px;
+
+        font-family: inherit;
+
+        color: #0f172a;
+
+        outline: none;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease,
+            background .2s ease;
+    }
+
+    input:hover {
+        border-color: #7dd3fc;
+    }
+
+    input:focus {
+        background: #fff;
+
+        border-color: #0ea5e9;
+
+        box-shadow:
+            0 0 0 4px rgba(14, 165, 233, .13);
+    }
+
+    button {
+        width: 100%;
+
+        height: 54px;
+
+        margin-top: 8px;
+
+        border: none;
+
+        border-radius: 14px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #0ea5e9,
+                #0284c7
+            );
+
+        color: white;
+
+        font-family: inherit;
+
+        font-size: 16px;
+
+        font-weight: 800;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 10px 20px rgba(14, 165, 233, .28);
+
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease,
+            filter .2s ease;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+
+        filter: brightness(1.05);
+
+        box-shadow:
+            0 14px 25px rgba(14, 165, 233, .35);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    .error {
+        margin-top: 18px;
+
+        padding: 12px 14px;
+
+        border-radius: 12px;
+
+        background: #fef2f2;
+
+        border: 1px solid #fecaca;
+
+        color: #dc2626;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        line-height: 1.6;
+    }
+
+    @keyframes cardIn {
+        from {
+            opacity: 0;
+
+            transform:
+                translateY(20px)
+                scale(.98);
+        }
+
+        to {
+            opacity: 1;
+
+            transform:
+                translateY(0)
+                scale(1);
+        }
+    }
+
+    @media (max-width: 520px) {
+
+        body {
+            padding: 16px;
+        }
+
+        .login-card {
+            padding: 36px 24px 30px;
+
+            border-radius: 22px;
+        }
+
+        .brand {
+            width: 76px;
+            height: 76px;
+
+            font-size: 39px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+    }
+</style>
+
+</head>
+
+<body class="login">
+
+<main class="login-card">
+
+    <div class="brand">🚌</div>
+
+    <p class="eyebrow">မြန်မာ ခရီးသွားလုပ်ငန်း</p>
+
+    <h1>ဘတ်စ်ကား လက်မှတ်စီမံမှု</h1>
+
+    <p>
+        Global Admin နှင့် Local Admin များအတွက်
+        လုပ်ငန်းသုံးစနစ်
+    </p>
+
+    <form method="post" action="/login">
+
+        <label>
+            အသုံးပြုသူအမည်
+
+            <input
+                name="username"
+                type="text"
+                placeholder="အသုံးပြုသူအမည် ထည့်ပါ"
+                autocomplete="username"
+                required>
+        </label>
+
+        <label>
+            စကားဝှက်
+
+            <input
+                type="password"
+                name="password"
+                placeholder="စကားဝှက် ထည့်ပါ"
+                autocomplete="current-password"
+                required>
+        </label>
+
+        <button type="submit">
+            ဝင်ရောက်မည်
+        </button>
+
+    </form>
+
+    <p
+        class="error"
+        th:if="${error}"
+        th:text="${error}">
+    </p>
+
+</main>
+
+</body>
+
+</html>

@@ -1,0 +1,1443 @@
+<!doctype html>
+
+<html lang="my">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Local Admin လုပ်ငန်း Dashboard</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Segoe UI", "Noto Sans Myanmar", Arial, sans-serif;
+        background:
+            radial-gradient(circle at top left, rgba(37, 99, 235, .12), transparent 35%),
+            radial-gradient(circle at bottom right, rgba(14, 165, 233, .10), transparent 35%),
+            #f4f7fb;
+        color: #172033;
+        min-height: 100vh;
+    }
+
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        min-height: 76px;
+        padding: 14px 5%;
+        background: rgba(255, 255, 255, .94);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid #e5eaf2;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, .06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    header > div:first-child {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 250px;
+    }
+
+    .brand {
+        width: 45px;
+        height: 45px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #2563eb, #0ea5e9);
+        color: white;
+        font-size: 24px;
+        box-shadow: 0 8px 20px rgba(37, 99, 235, .25);
+    }
+
+    header strong {
+        display: block;
+        font-size: 16px;
+        color: #111827;
+    }
+
+    header small {
+        display: block;
+        color: #718096;
+        margin-top: 2px;
+        font-size: 12px;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 25px;
+    }
+
+    .header-actions > span:last-child {
+        white-space: nowrap;
+        color: #475569;
+        font-size: 14px;
+    }
+
+    .header-actions > span:last-child span {
+        font-weight: 700;
+        color: #1d4ed8;
+    }
+
+    .header-actions a[href="/logout"] {
+        color: #dc2626;
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 5px;
+    }
+
+    .header-actions a[href="/logout"]:hover {
+        text-decoration: underline;
+    }
+
+    .admin-nav {
+        display: flex;
+        gap: 6px;
+        padding: 5px;
+        background: #f1f5f9;
+        border-radius: 12px;
+    }
+
+    .admin-nav a {
+        text-decoration: none;
+        color: #64748b;
+        padding: 9px 13px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: .2s ease;
+        white-space: nowrap;
+    }
+
+    .admin-nav a:hover,
+    .admin-nav a.active {
+        background: white;
+        color: #2563eb;
+        box-shadow: 0 3px 10px rgba(15, 23, 42, .08);
+    }
+
+    .wrap {
+        width: min(1400px, 92%);
+        margin: 0 auto;
+        padding: 35px 0 70px;
+    }
+
+    .hero {
+        position: relative;
+        overflow: hidden;
+        min-height: 210px;
+        padding: 35px 40px;
+        border-radius: 25px;
+        color: white;
+        background:
+            linear-gradient(135deg, rgba(15, 23, 42, .96), rgba(30, 64, 175, .95)),
+            #1e40af;
+        box-shadow: 0 20px 45px rgba(30, 64, 175, .18);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        right: -80px;
+        top: -120px;
+        background: rgba(255, 255, 255, .08);
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        right: 160px;
+        bottom: -130px;
+        background: rgba(56, 189, 248, .12);
+    }
+
+    .hero > div,
+    .hero .status {
+        position: relative;
+        z-index: 2;
+    }
+
+    .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-size: 11px;
+        font-weight: 800;
+        color: #60a5fa;
+        margin-bottom: 9px;
+    }
+
+    .hero h1 {
+        font-size: clamp(25px, 3vw, 38px);
+        margin-bottom: 10px;
+        letter-spacing: -.6px;
+    }
+
+    .hero p:not(.eyebrow) {
+        color: #dbeafe;
+        max-width: 680px;
+        line-height: 1.7;
+        font-size: 14px;
+    }
+
+    .status {
+        background: rgba(255, 255, 255, .12);
+        border: 1px solid rgba(255, 255, 255, .18);
+        padding: 11px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status::first-letter {
+        color: #22c55e;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 17px;
+        margin: 22px 0;
+    }
+
+    .stats > div {
+        background: white;
+        border: 1px solid #e7ebf2;
+        border-radius: 18px;
+        padding: 22px;
+        min-height: 105px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, .05);
+        transition: .25s ease;
+    }
+
+    .stats > div:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(15, 23, 42, .09);
+    }
+
+    .stats small {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .stats b {
+        display: block;
+        margin-top: 9px;
+        font-size: 27px;
+        color: #1d4ed8;
+    }
+
+    .error {
+        padding: 14px 17px;
+        margin: 15px 0;
+        border-radius: 12px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        font-weight: 600;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    article {
+        background: white;
+        border: 1px solid #e5eaf2;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, .05);
+        transition: .25s ease;
+    }
+
+    article:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 32px rgba(15, 23, 42, .08);
+    }
+
+    article h2 {
+        font-size: 19px;
+        color: #172033;
+        margin-bottom: 6px;
+    }
+
+    .hint {
+        color: #7a8799;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    article form {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        margin-top: 18px;
+    }
+
+    input,
+    select {
+        width: 100%;
+        height: 45px;
+        padding: 0 14px;
+        border: 1px solid #d9e0ea;
+        border-radius: 11px;
+        background: #f8fafc;
+        color: #1e293b;
+        outline: none;
+        font-family: inherit;
+        font-size: 13px;
+        transition: .2s ease;
+    }
+
+    input::placeholder {
+        color: #94a3b8;
+    }
+
+    input:hover,
+    select:hover {
+        border-color: #b9c5d6;
+        background: white;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #2563eb;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, .10);
+    }
+
+    button {
+        height: 45px;
+        border: none;
+        border-radius: 11px;
+        padding: 0 18px;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s ease;
+        box-shadow: 0 7px 16px rgba(37, 99, 235, .18);
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(37, 99, 235, .25);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    button.gold {
+        background: linear-gradient(135deg, #d97706, #f59e0b);
+        box-shadow: 0 7px 16px rgba(245, 158, 11, .18);
+    }
+
+    .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 11px;
+    }
+
+    .ticket {
+        border: 1px solid #fde68a;
+        background: linear-gradient(145deg, #fff, #fffbeb);
+    }
+
+    .panel {
+        background: white;
+        border: 1px solid #e5eaf2;
+        border-radius: 20px;
+        margin-top: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, .05);
+    }
+
+    .panel-head {
+        padding: 22px 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        border-bottom: 1px solid #edf0f5;
+        background: #fbfcfe;
+    }
+
+    .panel-head h2 {
+        font-size: 19px;
+        color: #172033;
+    }
+
+    .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+    thead {
+        background: #f8fafc;
+    }
+
+    th {
+        padding: 13px 15px;
+        text-align: left;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        border-bottom: 1px solid #e7ebf2;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #edf1f5;
+        color: #334155;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    tbody tr {
+        transition: .18s ease;
+    }
+
+    tbody tr:hover {
+        background: #f8fbff;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 35px;
+        padding: 5px 9px;
+        border-radius: 7px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .tag.green {
+        background: #ecfdf5;
+        color: #059669;
+    }
+
+    .link {
+        height: auto;
+        padding: 5px 7px;
+        border: none;
+        background: transparent;
+        color: #2563eb;
+        box-shadow: none;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .link:hover {
+        background: #eff6ff;
+        box-shadow: none;
+        transform: none;
+    }
+
+    .link.danger {
+        color: #dc2626;
+    }
+
+    .link.danger:hover {
+        background: #fef2f2;
+    }
+
+    td form {
+        display: inline;
+        margin: 0;
+    }
+
+    [hidden] {
+        display: none !important;
+    }
+
+    @media (max-width: 1100px) {
+        header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .admin-nav {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 750px) {
+        .wrap {
+            width: 94%;
+            padding-top: 20px;
+        }
+
+        header {
+            padding: 12px 3%;
+        }
+
+        .hero {
+            padding: 27px 23px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stats {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stats > div {
+            padding: 17px;
+        }
+
+        .stats b {
+            font-size: 22px;
+        }
+
+        .admin-nav {
+            width: 100%;
+        }
+
+        .admin-nav a {
+            font-size: 11px;
+            padding: 8px 10px;
+        }
+
+        .header-actions > span:last-child {
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .stats {
+            grid-template-columns: 1fr;
+        }
+
+        .row {
+            grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+            font-size: 24px;
+        }
+
+        .panel-head {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        article {
+            padding: 20px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div>
+    <span class="brand small">🚌</span>
+
+    <div>
+        <strong>Local Admin Operations</strong>
+        <small>နေ့စဉ်လုပ်ငန်းစီမံမှု</small>
+    </div>
+</div>
+
+<div class="header-actions">
+
+    <nav class="admin-nav" aria-label="စီမံမှုမီနူး">
+
+        <a href="#buses" data-section-link="buses">
+            ဘတ်စ်ကား စီမံရန်
+        </a>
+
+        <a href="#trips" data-section-link="trips">
+            ခရီးစဉ် စီမံရန်
+        </a>
+
+        <a href="#routes" data-section-link="routes">
+            စီစဉ်ထားသော လမ်းကြောင်းများ
+        </a>
+
+        <a href="#tickets" data-section-link="tickets">
+            ထုတ်ပြီးသော လက်မှတ်များ
+        </a>
+
+    </nav>
+
+    <span>
+        <span th:text="${admin.name}"></span>
+        ·
+        <a href="/logout">ထွက်ရန်</a>
+    </span>
+
+</div>
+
+</header>
+
+<main class="wrap">
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div>
+
+        <p class="eyebrow">
+            Local Admin Operations Center
+        </p>
+
+        <h1>
+            ဒေသခံအုပ်ချုပ်သူ Dashboard
+        </h1>
+
+        <p>
+            ဘတ်စ်ကား၊ လမ်းကြောင်းနှင့် လက်မှတ်လုပ်ငန်းများကို
+            တစ်နေရာတည်းမှ စီမံပါ။
+            အောက်က အဆင့်လိုက် Form များကို အသုံးပြုပါ။
+        </p>
+
+    </div>
+
+    <span class="status">
+        ● စနစ်အွန်လိုင်း
+    </span>
+
+</section>
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+    <div>
+        <small>အသုံးပြုနေသော ဘတ်စ်ကား</small>
+        <b th:text="${busCount}"></b>
+    </div>
+
+    <div>
+        <small>စီစဉ်ထားသော လမ်းကြောင်း</small>
+        <b th:text="${routeCount}"></b>
+    </div>
+
+    <div>
+        <small>ရောင်းပြီး လက်မှတ်</small>
+        <b th:text="${ticketCount}"></b>
+    </div>
+
+    <div>
+        <small>လက်မှတ်ဝင်ငွေ</small>
+        <b>
+            <span th:text="${revenue}"></span>
+            ကျပ်
+        </b>
+    </div>
+
+</section>
+
+
+<p class="error"
+   th:if="${error}"
+   th:text="${error}">
+</p>
+
+
+<!-- FORMS -->
+
+<section class="grid">
+
+    <!-- BUS -->
+
+    <article data-section="buses">
+
+        <h2>① ဘတ်စ်ကားအသစ်</h2>
+
+        <p class="hint">
+            Bus Number တစ်ခုတည်း မတူရပါ။
+        </p>
+
+        <form method="post" action="/bus">
+
+            <input
+                name="number"
+                placeholder="ဘတ်စ်ကားနံပါတ် (ဥပမာ 3)"
+                required>
+
+            <input
+                name="type"
+                placeholder="အမျိုးအစား (ဥပမာ YBS / VIP)"
+                required>
+
+            <input
+                name="seats"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]+"
+                placeholder="ထိုင်ခုံအရေအတွက်"
+                required>
+
+            <button>
+                ဘတ်စ်ကားထည့်ရန်
+            </button>
+
+        </form>
+
+    </article>
+
+
+    <!-- TRIP -->
+
+    <article data-section="trips">
+
+        <h2>② ခရီးစဉ်အသစ်</h2>
+
+        <p class="hint">
+            ထွက်ခွာရာ၊ ရောက်ရာ၊ အကွာအဝေး ထည့်ပါ။
+        </p>
+
+        <form method="post" action="/trip">
+
+            <input
+                name="from"
+                placeholder="ထွက်ခွာရာ (ဥပမာ ရန်ကုန်)"
+                required>
+
+            <input
+                name="to"
+                placeholder="ရောက်ရာ (ဥပမာ မန္တလေး)"
+                required>
+
+            <input
+                name="distance"
+                type="text"
+                inputmode="decimal"
+                pattern="[0-9]+([.][0-9]+)?"
+                placeholder="အကွာအဝေး km"
+                required>
+
+            <button>
+                ခရီးစဉ်ထည့်ရန်
+            </button>
+
+        </form>
+
+    </article>
+
+
+    <!-- ROUTE -->
+
+    <article data-section="routes">
+
+        <h2>③ လမ်းကြောင်းအသစ်</h2>
+
+        <p class="hint">
+            Trip ကို စာရင်းထဲမှ ရွေးပါ။
+        </p>
+
+        <form id="route-form" method="post" action="/route">
+
+            <select name="tripId" required>
+
+                <option value="" selected disabled>
+                    Trip ရွေးပါ
+                </option>
+
+                <option
+                    th:each="t:${trips}"
+                    th:value="${t.trip_id}"
+                    th:text="${'#'+t.trip_id+' — '+t.departure_location+' → '+t.destination_location+' ('+t.distance_km+' km)'}">
+                </option>
+
+            </select>
+
+
+            <input
+                name="date"
+                type="date"
+                required>
+
+
+            <div class="row">
+
+                <input
+                    name="depart"
+                    type="time"
+                    required>
+
+                <input
+                    name="arrive"
+                    type="time"
+                    required>
+
+            </div>
+
+
+            <div class="row">
+
+                <input
+                    name="seats"
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]+"
+                    placeholder="လွတ်ခုံအရေအတွက်"
+                    required>
+
+                <input
+                    name="price"
+                    type="text"
+                    inputmode="decimal"
+                    pattern="[0-9]+([.][0-9]+)?"
+                    placeholder="ဈေးနှုန်း ကျပ်"
+                    required>
+
+            </div>
+
+
+            <button>
+                လမ်းကြောင်းထည့်ရန်
+            </button>
+
+        </form>
+
+    </article>
+
+
+    <!-- ASSIGN BUS -->
+
+    <article data-section="routes">
+
+        <h2>④ Bus → Route ချိတ်ရန်</h2>
+
+        <p class="hint">
+            ID ရိုက်စရာမလိုဘဲ စာရင်းထဲမှ ရွေးပါ။
+        </p>
+
+        <form method="post" action="/assign">
+
+            <select name="busId" required>
+
+                <option value="" selected disabled>
+                    Bus ရွေးပါ
+                </option>
+
+                <option
+                    th:each="b:${buses}"
+                    th:value="${b.bus_id}"
+                    th:text="${'#'+b.bus_id+' — '+b.bus_number+' | '+b.bus_type+' | '+b.seat_capacity+' ခုံ'}">
+                </option>
+
+            </select>
+
+
+            <select name="routeId" required>
+
+                <option value="" selected disabled>
+                    Route ရွေးပါ
+                </option>
+
+                <option
+                    th:each="r:${routes}"
+                    th:value="${r.route_id}"
+                    th:text="${'#'+r.route_id+' — '+r.departure_location+' → '+r.destination_location+' | '+r.route_date+' | '+r.departure_time}">
+                </option>
+
+            </select>
+
+
+            <button>
+                Bus နှင့် Route ချိတ်ရန်
+            </button>
+
+        </form>
+
+    </article>
+
+
+    <!-- TICKET -->
+
+    <article class="ticket" data-section="tickets">
+
+        <h2>⑤ ခရီးသည်လက်မှတ်ထုတ်ရန်</h2>
+
+        <p class="hint">
+            Route ကို စာရင်းမှရွေးပြီး Passenger အချက်အလက် ဖြည့်ပါ။
+        </p>
+
+        <form method="post" action="/ticket">
+
+            <select name="routeId" required>
+
+                <option value="" selected disabled>
+                    Route ရွေးပါ
+                </option>
+
+                <option
+                    th:each="r:${routes}"
+                    th:value="${r.route_id}"
+                    th:text="${'#'+r.route_id+' — '+r.departure_location+' → '+r.destination_location+' | '+r.route_date+' | လွတ်ခုံ '+r.available_seats}">
+                </option>
+
+            </select>
+
+
+            <input
+                name="passenger"
+                placeholder="ခရီးသည်အမည်"
+                required>
+
+
+            <input
+                name="phone"
+                placeholder="ဖုန်းနံပါတ် (09... / +959...)"
+                pattern="(09|\+959)[0-9]{7,12}"
+                required>
+
+
+            <input
+                name="seat"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]+"
+                placeholder="ထိုင်ခုံနံပါတ်"
+                required>
+
+
+            <button class="gold">
+                လက်မှတ်ထုတ်မည်
+            </button>
+
+        </form>
+
+    </article>
+
+</section>
+
+
+<!-- BUS TABLE -->
+
+<section class="panel" data-section="buses">
+
+    <div class="panel-head">
+
+        <div>
+            <h2>ဘတ်စ်ကား စီမံရန်</h2>
+            <span class="hint">
+                အသုံးပြု/ပိတ်ထားမှု
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Bus</th>
+                    <th>အမျိုးအစား</th>
+                    <th>ထိုင်ခုံ</th>
+                    <th>အခြေအနေ</th>
+                    <th>လုပ်ဆောင်ချက်</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr th:each="b:${buses}">
+
+                    <td th:text="${b.bus_number}"></td>
+
+                    <td th:text="${b.bus_type}"></td>
+
+                    <td th:text="${b.seat_capacity}"></td>
+
+                    <td th:text="${b.active ? 'အသုံးပြုနေ' : 'ပိတ်ထား'}"></td>
+
+                    <td>
+
+                        <form
+                            method="post"
+                            th:action="@{'/bus/'+${b.bus_id}+'/toggle'}">
+
+                            <button
+                                class="link"
+                                th:text="${b.active ? 'ပိတ်မည်' : 'ပြန်ဖွင့်မည်'}">
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- TRIP TABLE -->
+
+<section class="panel" data-section="trips">
+
+    <div class="panel-head">
+
+        <div>
+            <h2>ခရီးစဉ် စီမံရန်</h2>
+
+            <span class="hint">
+                Trip ID ကို အလိုအလျောက် အသုံးပြုနိုင်သည်
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Trip ID</th>
+                    <th>ထွက်ခွာရာ</th>
+                    <th>ရောက်ရာ</th>
+                    <th>အကွာအဝေး</th>
+                    <th>အခြေအနေ</th>
+                    <th>လုပ်ဆောင်ချက်</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr th:each="t:${trips}">
+
+                    <td>
+                        <span
+                            class="tag"
+                            th:text="${t.trip_id}">
+                        </span>
+                    </td>
+
+                    <td th:text="${t.departure_location}"></td>
+
+                    <td th:text="${t.destination_location}"></td>
+
+                    <td th:text="${t.distance_km+' km'}"></td>
+
+                    <td th:text="${t.active ? 'အသုံးပြုနေ' : 'ပိတ်ထား'}"></td>
+
+                    <td>
+
+                        <form
+                            method="post"
+                            th:action="@{'/trip/'+${t.trip_id}+'/toggle'}">
+
+                            <button
+                                class="link"
+                                th:text="${t.active ? 'ပိတ်မည်' : 'ပြန်ဖွင့်မည်'}">
+                            </button>
+
+                        </form>
+
+
+                        <button
+                            type="button"
+                            class="link"
+                            th:attr="data-trip-id=${t.trip_id}"
+                            onclick="selectTrip(this.dataset.tripId)">
+
+                            Route ထည့်ရန်
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- ROUTE TABLE -->
+
+<section class="panel" data-section="routes">
+
+    <div class="panel-head">
+
+        <div>
+
+            <p class="eyebrow">
+                Live data
+            </p>
+
+            <h2>
+                စီစဉ်ထားသော လမ်းကြောင်းများ
+            </h2>
+
+        </div>
+
+        <span class="hint">
+            BUS_TRIP ချိတ်ဆက်မှုနှင့် ထိုင်ခုံအခြေအနေ
+        </span>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Route ID</th>
+                    <th>Trip ID</th>
+                    <th>လမ်းကြောင်း</th>
+                    <th>အကွာအဝေး</th>
+                    <th>ရက်စွဲ</th>
+                    <th>အချိန်</th>
+                    <th>လွတ်ထိုင်ခုံ</th>
+                    <th>ဈေးနှုန်း</th>
+                    <th>အခြေအနေ</th>
+                    <th>လုပ်ဆောင်ချက်</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr th:each="r:${routes}">
+
+                    <td>
+                        <span
+                            class="tag"
+                            th:text="${r.route_id}">
+                        </span>
+                    </td>
+
+                    <td>
+                        <span
+                            class="tag"
+                            th:text="${r.trip_id}">
+                        </span>
+                    </td>
+
+                    <td
+                        th:text="${r.departure_location+' → '+r.destination_location}">
+                    </td>
+
+                    <td
+                        th:text="${r.distance_km+' km'}">
+                    </td>
+
+                    <td
+                        th:text="${r.route_date}">
+                    </td>
+
+                    <td
+                        th:text="${r.departure_time+' - '+r.arrival_time}">
+                    </td>
+
+                    <td
+                        th:text="${r.available_seats}">
+                    </td>
+
+                    <td
+                        th:text="${r.ticket_price_kyat+' ကျပ်'}">
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="tag"
+                            th:text="${r.status}">
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <form
+                            method="post"
+                            th:action="@{'/route/'+${r.route_id}+'/cancel'}">
+
+                            <button class="link danger">
+                                ပယ်ဖျက်ရန်
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- TICKET TABLE -->
+
+<section class="panel" data-section="tickets">
+
+    <div class="panel-head">
+
+        <div>
+
+            <h2>
+                ထုတ်ပြီးသော လက်မှတ်များ
+            </h2>
+
+            <span class="hint">
+                Ticket status နှင့် passenger details
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>လက်မှတ်</th>
+                    <th>ခရီးသည်</th>
+                    <th>ဖုန်း</th>
+                    <th>ခရီးစဉ်</th>
+                    <th>ထိုင်ခုံ</th>
+                    <th>ပမာဏ</th>
+                    <th>အခြေအနေ</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr th:each="k:${tickets}">
+
+                    <td th:text="${'#'+k.ticket_id}"></td>
+
+                    <td th:text="${k.passenger_name}"></td>
+
+                    <td th:text="${k.passenger_phone}"></td>
+
+                    <td
+                        th:text="${k.departure_location+' → '+k.destination_location}">
+                    </td>
+
+                    <td th:text="${k.seat_number}"></td>
+
+                    <td
+                        th:text="${k.total_amount_kyat+' ကျပ်'}">
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="tag green"
+                            th:text="${k.ticket_status}">
+                        </span>
+
+
+                        <form
+                            th:if="${k.ticket_status == 'BOOKED'}"
+                            method="post"
+                            th:action="@{'/ticket/'+${k.ticket_id}+'/used'}">
+
+                            <button
+                                class="link"
+                                type="submit">
+
+                                အသုံးပြုပြီးဟုမှတ်ရန်
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+</main>
+
+<script>
+
+    function selectTrip(id) {
+
+        const select =
+            document.querySelector('select[name="tripId"]');
+
+        if (select) {
+
+            select.value = id;
+
+            showSection('routes');
+
+            document
+                .getElementById('route-form')
+                .scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+            select.focus();
+        }
+    }
+
+
+    function showSection(section) {
+
+        const current = section || 'buses';
+
+        document
+            .querySelectorAll('[data-section]')
+            .forEach(function (item) {
+
+                item.hidden =
+                    item.dataset.section !== current;
+
+            });
+
+
+        document
+            .querySelectorAll('[data-section-link]')
+            .forEach(function (link) {
+
+                link.classList.toggle(
+                    'active',
+                    link.dataset.sectionLink === current
+                );
+
+            });
+
+    }
+
+
+    document
+        .querySelectorAll('[data-section-link]')
+        .forEach(function (link) {
+
+            link.addEventListener(
+                'click',
+                function (event) {
+
+                    event.preventDefault();
+
+                    showSection(
+                        link.dataset.sectionLink
+                    );
+
+                    history.replaceState(
+                        null,
+                        '',
+                        '#' + link.dataset.sectionLink
+                    );
+
+                }
+            );
+
+        });
+
+
+    showSection(
+        location.hash.substring(1) || 'buses'
+    );
+
+</script>
+
+</body>
+</html>
